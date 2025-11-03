@@ -13,6 +13,6 @@ public class CustomService : GatewayService
 
     public override void ProcessJobCreation(string payload)
     {
-        Console.WriteLine("CustomService ProcessJobCreation");
+        SendToSignalR("http://localhost:3000", "Success", payload);
     }
 }

@@ -39,10 +39,14 @@ public class GatewayService : Gateway
 
     public override void ProcessJobCreation(string payload)
     {
-        Console.WriteLine($"Processing job creation: {payload}");
         SendToRpc("JobService", "ProcessJob", payload);
     }
 
+    public override void SendToSignalR(string channel, string action, string data)
+    {
+        _signalService.SendData<string, string, string>(channel, action, data);
+    }
+    
     private void ProcessNotificationSuccess(string payload)
     {
         Console.WriteLine($"Processing notification success: {payload}");
