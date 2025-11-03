@@ -1,6 +1,8 @@
 using ApiGateway;
 using PEPSignal;
 using System.Text.Json;
+using ApiGateway.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-SignalRHelper.RegisterHub(builder.Services);
+// SignalRHelper.RegisterHub(builder.Services);
+builder.Services.AddGatewayService(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {
@@ -30,17 +33,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Lifetime.ApplicationStarted.Register(() =>
 {
-    SignalRHelper.StartListening();
-    Console.WriteLine("Listening for SignalR messages...");
+    // SignalRHelper.StartListening();
+    // Console.WriteLine("Listening for SignalR messages...");
+    var service = app.Services.GetRequiredService<GatewayService>();
+    service.StartListening();
 });
 
 app.Run();

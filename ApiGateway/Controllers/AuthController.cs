@@ -10,7 +10,7 @@ namespace ApiGateway.Controllers
     public class AuthController : ControllerBase
     {
         private readonly PEPGRPC _pepRPC;
-        private const string _serverURL = "http://localhost:5280";
+        private const string _serverURL = "http://localhost:50053";
         public AuthController()
         {
             _pepRPC = new PEPGRPC();
