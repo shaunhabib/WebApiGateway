@@ -6,11 +6,11 @@ namespace ApiGateway.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class JobsController : ControllerBase
+public class CustomController : ControllerBase
 {
-    private readonly JobService _apiGateway;
+    private readonly CustomService _apiGateway;
 
-    public JobsController(JobService apiGateway)
+    public CustomController(CustomService apiGateway)
     {
         _apiGateway = apiGateway;
     }

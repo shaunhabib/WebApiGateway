@@ -1,3 +1,4 @@
+using ApiGateway.Abstraction;
 using ApiGateway.Config;
 using ApiGateway.Services;
 using PEPRPC;
@@ -17,12 +18,7 @@ public static class GatewayServiceExtensions
     
         services.AddSingleton(sp =>
         {
-            var grpcConfig = new PEPRPC.MessageTransceiverConfig
-            {
-                Host = options.GrpcHost,
-                Port = options.GrpcPort
-            };
-            return new PEPGRPC(grpcConfig);
+            return new PEPGRPC();
         });
 
         var signalRConfig = new PEPSignal.MessageTransceiverConfig
@@ -41,7 +37,9 @@ public static class GatewayServiceExtensions
 
         services.AddSingleton(sp => signalRService);
 
-        services.AddSingleton<GatewayService>();
+        services.AddSingleton<Gateway, GatewayService>();
+        services.AddSingleton<CustomService>();
+        services.AddSingleton<JobService>();
     
         return services;
     }

@@ -1,3 +1,4 @@
+using ApiGateway.Abstraction;
 using ApiGateway.Config;
 using Microsoft.Extensions.Options;
 using PEPRPC;
@@ -5,7 +6,7 @@ using PEPSignal;
 
 namespace ApiGateway.Services;
 
-public class GatewayService
+public class GatewayService : Gateway
 {
     private readonly PEPGRPC _rpcService;
     private readonly PEPSignalR _signalService;
@@ -18,7 +19,7 @@ public class GatewayService
         _options = options.Value;
     }
 
-    public void StartListening()
+    public override void StartListening()
     {
         foreach (var listener in _options.SignalRListeners)
         {
@@ -33,32 +34,10 @@ public class GatewayService
     
     private void OnRawSignalRDataReceived(string channel, string payload, PEPSignal.DataReadyEventArgs args)
     {
-        Console.WriteLine($"Processing data from channel '{args.Channel}': {args.Payload}");
-
-        try
-        {
-            switch (args.Channel)
-            {
-                case "Job" when args.Action == "Create":
-                    ProcessJobCreation(args.Payload);
-                    break;
-                case "Notification" when args.Action == "Success":
-                    ProcessNotificationSuccess(args.Payload);
-                    break;
-                default:
-                    Console.WriteLine($"Unhandled channel/action: {args.Channel}/{args.Action}");
-                    break;
-            }
-
-            _signalService.SendData<string, string, string>(channel, args.Action, args.Payload);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error in raw SignalR data receiver: {ex.Message}");
-        }
+        ProcessJobCreation(args.Payload);
     }
 
-    private void ProcessJobCreation(string payload)
+    public override void ProcessJobCreation(string payload)
     {
         Console.WriteLine($"Processing job creation: {payload}");
         SendToRpc("JobService", "ProcessJob", payload);

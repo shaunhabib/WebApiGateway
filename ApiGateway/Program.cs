@@ -1,6 +1,7 @@
 using ApiGateway;
 using PEPSignal;
 using System.Text.Json;
+using ApiGateway.Abstraction;
 using ApiGateway.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
@@ -40,7 +41,7 @@ app.Lifetime.ApplicationStarted.Register(() =>
 {
     // SignalRHelper.StartListening();
     // Console.WriteLine("Listening for SignalR messages...");
-    var service = app.Services.GetRequiredService<GatewayService>();
+    var service = app.Services.GetRequiredService<Gateway>();
     service.StartListening();
 });
 
