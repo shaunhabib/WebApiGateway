@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ApiGateway.Models;
+using ApiGateway.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PEPRPC;
 using System.Text.Json;
@@ -9,11 +11,11 @@ namespace ApiGateway.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly PEPGRPC _pepRPC;
-        private const string _serverURL = "http://localhost:50053";
-        public AuthController()
+        private const string _serverURL = "http://localhost:5280";
+        private readonly AuthService _authService;
+        public AuthController(AuthService authService)
         {
-            _pepRPC = new PEPGRPC();
+            _authService = authService;
         }
 
         [HttpPost]
@@ -21,15 +23,8 @@ namespace ApiGateway.Controllers
         {
             try
             {
-                var rpcRequest = new LoginRequestTorpc
-                {
-                    UserName = request.UserName,
-                    Password = request.Password,
-                    Age = request.Age,
-                    SubmittedDate = DateTimeOffset.UtcNow
-                };
-                string rpcData = JsonSerializer.Serialize(rpcRequest);
-                _pepRPC.SendData<string, string, string>(_serverURL, "Login", rpcData);
+                string rpcData = JsonSerializer.Serialize(request);
+                _authService.SendToRpc(_serverURL, "Login", rpcData);
                 return Ok("Login is processing");
             }
             catch (Exception ex)
@@ -38,20 +33,5 @@ namespace ApiGateway.Controllers
             }
            
         }
-    }
-
-    public class LoginRequest
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public int Age { get; set; }
-    }
-
-    public class LoginRequestTorpc
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public int Age { get; set; }
-        public DateTimeOffset SubmittedDate { get; set; }
     }
 }

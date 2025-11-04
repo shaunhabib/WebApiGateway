@@ -38,6 +38,7 @@ public static class GatewayServiceExtensions
         services.AddSingleton<SignalRRouterService>();
         services.AddSingleton<JobService>(sp => sp.GetRequiredService<SignalRRouterService>().GetJobService());
         services.AddSingleton<NotificationService>(sp => sp.GetRequiredService<SignalRRouterService>().GetNotificationService());
+        services.AddSingleton<AuthService>(sp => sp.GetRequiredService<SignalRRouterService>().GetAuthService());
 
         return services;
     }
