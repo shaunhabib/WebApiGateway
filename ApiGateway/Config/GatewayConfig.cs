@@ -10,8 +10,7 @@ public class GatewayConfig
     public List<string> SignalRHubs { get; set; } = new() { "Job", "Notification", "Auth", "Notify" };
     public Dictionary<string, string> SignalRListeners { get; set; } = new()
     {
-        { "Job", "Create" },
-        { "Notification", "Success" },
+        { "Job", "Success" },
         { "Auth", "Login" }
     };
 }

@@ -26,7 +26,7 @@ public class JobsController : ControllerBase
             return Ok(new { 
                 jobId = request.JobId, 
                 status = "submitted",
-                message = "Job submitted for processing"
+                message = jobData
             });
         }
         catch (Exception ex)

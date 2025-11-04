@@ -14,6 +14,6 @@ public class NotificationService : GatewayService
 
     public override void Process(string message)
     {
-        Console.WriteLine($"Notification Service {message}");
+        Console.WriteLine(message);
     }
 }

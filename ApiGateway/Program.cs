@@ -7,10 +7,8 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -28,7 +26,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 app.UseCors();
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -36,14 +33,6 @@ if (app.Environment.IsDevelopment())
 }
 app.UseAuthorization();
 app.MapControllers();
-
-// app.Lifetime.ApplicationStarted.Register(() =>
-// {
-//     // SignalRHelper.StartListening();
-//     // Console.WriteLine("Listening for SignalR messages...");
-//     var service = app.Services.GetRequiredService<GatewayService>();
-//     service.StartListening();
-// });
 
 app.Lifetime.ApplicationStarted.Register(() =>
 {

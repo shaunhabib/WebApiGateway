@@ -14,6 +14,7 @@ public class JobService : GatewayService
 
     public override void Process(string message)
     {
-        Console.WriteLine($"Job Service {message}");
+        Console.WriteLine($"Job service {message}");
+        SendToSignalR("Notification", "Response", message);
     }
 }

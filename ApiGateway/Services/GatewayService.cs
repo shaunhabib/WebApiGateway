@@ -27,9 +27,8 @@ public class GatewayService
     {
         
     }
-    
     public void SendToSignalR(string channel, string action, string data)
     {
-        _signalService.SendData<string, string, string>(channel, action, data);
+        _signalService.SendData<string, string, bool>(channel, action, data);
     }
 }
