@@ -5,15 +5,15 @@ using PEPSignal;
 
 namespace ApiGateway.Services;
 
-public class JobService : GatewayService
+public class NotificationService : GatewayService
 {
-    public JobService(PEPSignalR signalService, PEPGRPC rpcService, IOptions<GatewayConfig> options) 
+    public NotificationService(PEPSignalR signalService, PEPGRPC rpcService, IOptions<GatewayConfig> options) 
         : base(signalService, rpcService, options)
     {
     }
 
     public override void Process(string message)
     {
-        Console.WriteLine($"Job Service {message}");
+        Console.WriteLine($"Notification Service {message}");
     }
 }

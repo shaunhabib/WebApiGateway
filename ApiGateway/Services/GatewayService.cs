@@ -1,4 +1,3 @@
-using ApiGateway.Abstraction;
 using ApiGateway.Config;
 using Microsoft.Extensions.Options;
 using PEPRPC;
@@ -6,11 +5,11 @@ using PEPSignal;
 
 namespace ApiGateway.Services;
 
-public class GatewayService : Gateway
+public class GatewayService
 {
-    private readonly PEPGRPC _rpcService;
-    private readonly PEPSignalR _signalService;
-    private readonly GatewayConfig _options;
+    protected readonly PEPGRPC _rpcService;
+    protected readonly PEPSignalR _signalService;
+    protected readonly GatewayConfig _options;
 
     public GatewayService(PEPSignalR signalService, PEPGRPC rpcService, IOptions<GatewayConfig> options)
     {
@@ -18,38 +17,19 @@ public class GatewayService : Gateway
         _rpcService = rpcService;
         _options = options.Value;
     }
-
-    public override void StartListening()
-    {
-        foreach (var listener in _options.SignalRListeners)
-        {
-            _signalService.ListenForData(listener.Key, listener.Value, OnRawSignalRDataReceived);
-        }
-    }
     
     public void SendToRpc(string channel, string action, string data)
     {
         _rpcService.SendData<string, string, string>(channel, action, data);
     }
+
+    public virtual void Process(string message)
+    {
+        
+    }
     
-    private void OnRawSignalRDataReceived(string channel, string payload, PEPSignal.DataReadyEventArgs args)
-    {
-        ProcessJobCreation(args.Payload);
-    }
-
-    public override void ProcessJobCreation(string payload)
-    {
-        SendToRpc("JobService", "ProcessJob", payload);
-    }
-
-    public override void SendToSignalR(string channel, string action, string data)
+    public void SendToSignalR(string channel, string action, string data)
     {
         _signalService.SendData<string, string, string>(channel, action, data);
     }
-    
-    private void ProcessNotificationSuccess(string payload)
-    {
-        Console.WriteLine($"Processing notification success: {payload}");
-    }
-    
 }

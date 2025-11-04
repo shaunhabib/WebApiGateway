@@ -37,12 +37,18 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 app.MapControllers();
 
+// app.Lifetime.ApplicationStarted.Register(() =>
+// {
+//     // SignalRHelper.StartListening();
+//     // Console.WriteLine("Listening for SignalR messages...");
+//     var service = app.Services.GetRequiredService<GatewayService>();
+//     service.StartListening();
+// });
+
 app.Lifetime.ApplicationStarted.Register(() =>
 {
-    // SignalRHelper.StartListening();
-    // Console.WriteLine("Listening for SignalR messages...");
-    var service = app.Services.GetRequiredService<Gateway>();
-    service.StartListening();
+    var router = app.Services.GetRequiredService<SignalRRouterService>();
+    router.StartListening();
 });
 
 app.Run();

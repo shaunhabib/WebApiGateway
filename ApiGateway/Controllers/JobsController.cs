@@ -8,11 +8,11 @@ namespace ApiGateway.Controllers;
 [Route("api/[controller]")]
 public class JobsController : ControllerBase
 {
-    private readonly JobService _apiGateway;
+    private readonly JobService _jobService;
 
-    public JobsController(JobService apiGateway)
+    public JobsController(JobService jobService)
     {
-        _apiGateway = apiGateway;
+        _jobService = jobService;
     }
 
     [HttpPost]
@@ -21,7 +21,7 @@ public class JobsController : ControllerBase
         try
         {
             var jobData = System.Text.Json.JsonSerializer.Serialize(request);
-            _apiGateway.SendToRpc("http://localhost:50053", "Create", jobData);
+            _jobService.SendToRpc("http://localhost:50053", "Create", jobData);
             
             return Ok(new { 
                 jobId = request.JobId, 
@@ -34,5 +34,4 @@ public class JobsController : ControllerBase
             return StatusCode(500, new { error = ex.Message });
         }
     }
-
 }

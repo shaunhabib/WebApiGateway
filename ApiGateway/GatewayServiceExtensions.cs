@@ -13,13 +13,10 @@ public static class GatewayServiceExtensions
         IConfiguration configuration)
     {
         services.Configure<GatewayConfig>(configuration.GetSection("Gateway"));
-    
+
         var options = configuration.GetSection("Gateway").Get<GatewayConfig>() ?? new GatewayConfig();
-    
-        services.AddSingleton(sp =>
-        {
-            return new PEPGRPC();
-        });
+
+        services.AddSingleton(sp => new PEPGRPC());
 
         var signalRConfig = new PEPSignal.MessageTransceiverConfig
         {
@@ -37,10 +34,11 @@ public static class GatewayServiceExtensions
 
         services.AddSingleton(sp => signalRService);
 
-        services.AddSingleton<Gateway, GatewayService>();
-        services.AddSingleton<CustomService>();
-        services.AddSingleton<JobService>();
-    
+        // Register services
+        services.AddSingleton<SignalRRouterService>();
+        services.AddSingleton<JobService>(sp => sp.GetRequiredService<SignalRRouterService>().GetJobService());
+        services.AddSingleton<NotificationService>(sp => sp.GetRequiredService<SignalRRouterService>().GetNotificationService());
+
         return services;
     }
 }
