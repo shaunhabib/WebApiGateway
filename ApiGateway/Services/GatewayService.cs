@@ -25,7 +25,7 @@ public class GatewayService
 
     public virtual void Process(string message)
     {
-        
+        throw new NotImplementedException();
     }
     public void SendToSignalR(string channel, string action, string data)
     {
