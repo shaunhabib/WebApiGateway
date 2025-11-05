@@ -7,10 +7,13 @@ public class GatewayConfig
     public string SignalRHost { get; set; } = "localhost";
     public int SignalRPort { get; set; } = 5164;
     
-    public List<string> SignalRHubs { get; set; } = new() { "Job", "Notification", "Auth", "Notify" };
+    public List<string> SignalRHubs { get; set; } = new() { "Job", "Notification", "Auth", "Notify", "POC", "PEPNotification" };
     public Dictionary<string, string> SignalRListeners { get; set; } = new()
     {
         { "Job", "Success" },
-        { "Auth", "Login" }
+        { "Auth", "Login" },
+        { "POC", "Action" },
+        {"PEPJob", "PEPJobCreate" },
+        {"PEPNotification", "PEPResponse" }
     };
 }

@@ -2,38 +2,36 @@
 using ApiGateway.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PEPRPC;
 using System.Text.Json;
 
 namespace ApiGateway.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class RegisterController : ControllerBase
     {
-        private const string _serverURL = "http://localhost:5280";
-        private readonly AuthService _authService;
-        public AuthController(AuthService authService)
+        private const string _serverURL2 = "http://192.168.110.43:5280";
+        private readonly RegisterService _registerService;
+
+        public RegisterController(RegisterService registerService)
         {
-            _authService = authService;
+            _registerService = registerService;
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public IActionResult Register([FromBody] RegisterRequest request)
         {
             try
             {
                 string rpcData = JsonSerializer.Serialize(request);
-                _authService.SendToRpc(_serverURL, "Login", rpcData);
-                return Ok("Login is processing");
+                _registerService.SendToRpc(_serverURL2, "Register", rpcData);
+                return Ok("Register is processing");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-           
-        }
 
-        
+        }
     }
 }

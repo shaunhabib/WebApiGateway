@@ -12,6 +12,7 @@ public class SignalRRouterService
     private readonly NotificationService _notificationService;
     private readonly AuthService _authService;
     private readonly PEPJobService _PEPJobService;
+    private readonly RegisterService _registerService;
     private readonly PEPSignalR _signalService;
     private readonly GatewayConfig _options;
     private readonly Dictionary<string, bool> _registeredListeners;
@@ -26,6 +27,7 @@ public class SignalRRouterService
         _notificationService = new NotificationService(signalService, rpcService, options);
         _authService = new AuthService(signalService, rpcService, options);
         _PEPJobService = new PEPJobService(signalService, rpcService, options);
+        _registerService = new RegisterService(signalService, rpcService, options);
     }
 
     public void StartListening()
@@ -78,6 +80,9 @@ public class SignalRRouterService
             case "pepjob":
                 _PEPJobService.Process(message);
                 break;
+            case "poc":
+                _registerService.Process(message);
+                break;
 
             default:
                 break;
@@ -88,4 +93,5 @@ public class SignalRRouterService
     public NotificationService GetNotificationService() => _notificationService;
     public AuthService GetAuthService() => _authService;
     public PEPJobService GetPEPJobService() => _PEPJobService;
+    public RegisterService GetRegisterService() => _registerService;
 }
