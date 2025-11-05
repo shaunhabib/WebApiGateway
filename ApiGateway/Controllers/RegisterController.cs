@@ -10,7 +10,7 @@ namespace ApiGateway.Controllers
     [ApiController]
     public class RegisterController : ControllerBase
     {
-        private const string _serverURL2 = "http://192.168.110.43:5280";
+        private const string _serverURL = "http://192.168.110.43:5280";
         private readonly RegisterService _registerService;
 
         public RegisterController(RegisterService registerService)
@@ -24,7 +24,7 @@ namespace ApiGateway.Controllers
             try
             {
                 string rpcData = JsonSerializer.Serialize(request);
-                _registerService.SendToRpc(_serverURL2, "Register", rpcData);
+                _registerService.SendToRpc(_serverURL, "Register", rpcData);
                 return Ok("Register is processing");
             }
             catch (Exception ex)

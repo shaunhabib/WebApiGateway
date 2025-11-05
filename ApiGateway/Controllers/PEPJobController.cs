@@ -27,7 +27,7 @@ namespace ApiGateway.Controllers
                 jobData.GatewayTimestamp = gatewayTimestamp;
 
                 string jobSerialized = JsonSerializer.Serialize(jobData);
-                _pepJobService.SendToRpc("http://localhost:50053", "create", jobSerialized);
+                _pepJobService.SendToRpc("http://localhost:50093", "create", jobSerialized);
 
                 return Ok(new
                 {

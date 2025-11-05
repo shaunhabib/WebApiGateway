@@ -11,7 +11,7 @@ namespace ApiGateway.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private const string _serverURL = "http://localhost:5280";
+        private const string _serverURL = "http://localhost:50051";
         private readonly AuthService _authService;
         public AuthController(AuthService authService)
         {
