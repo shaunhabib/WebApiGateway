@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PEPRPC" Version="1.0.5" />
-    <PackageReference Include="PEPSignal" Version="1.1.0" />
+    <PackageReference Include="PEPRPC" Version="1.0.7" />
+    <PackageReference Include="PEPSignal" Version="1.2.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 

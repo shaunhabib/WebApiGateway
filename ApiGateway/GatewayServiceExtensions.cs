@@ -26,6 +26,8 @@ public static class GatewayServiceExtensions
 
         var signalRService = new PEPSignalR();
         signalRService.Configure(signalRConfig);
+        string channel = nameof(PEPCore.Channel.Notification);
+        signalRService.RegisterHub(channel, services);
 
         foreach (var hub in options.SignalRHubs)
         {
@@ -37,10 +39,6 @@ public static class GatewayServiceExtensions
         // Register services
         services.AddSingleton<SignalRRouterService>();
         services.AddSingleton<JobService>(sp => sp.GetRequiredService<SignalRRouterService>().GetJobService());
-        services.AddSingleton<NotificationService>(sp => sp.GetRequiredService<SignalRRouterService>().GetNotificationService());
-        services.AddSingleton<AuthService>(sp => sp.GetRequiredService<SignalRRouterService>().GetAuthService());
-        services.AddSingleton<PEPJobService>(sp => sp.GetRequiredService<SignalRRouterService>().GetPEPJobService());
-        services.AddSingleton<RegisterService>(sp => sp.GetRequiredService<SignalRRouterService>().GetRegisterService());
 
         return services;
     }
