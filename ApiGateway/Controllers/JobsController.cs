@@ -21,7 +21,7 @@ public class JobsController : ControllerBase
         try
         {
             var jobData = System.Text.Json.JsonSerializer.Serialize(request);
-            _jobService.SendToRpc("http://localhost:50053", "Create", jobData);
+            _jobService.SendToRpc("https://peptransport.ebsbd.com:50053", "Create", jobData);
             
             return Ok(new { 
                 jobId = request.JobId, 

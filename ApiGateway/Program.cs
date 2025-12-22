@@ -12,7 +12,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// SignalRHelper.RegisterHub(builder.Services);
 builder.Services.AddGatewayService(builder.Configuration);
 
 builder.Services.AddCors(options =>

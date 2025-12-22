@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using PEPRPC;
 using PEPSignal;
+using System.Diagnostics;
 
 namespace ApiGateway.Services
 {
@@ -15,12 +16,15 @@ namespace ApiGateway.Services
         {
             try
             {
-                Console.WriteLine($"Auth Service receive data: {message}");
+                string info = $"Auth Service received data: {message}";
+                Console.WriteLine(info);
+
+
                 SendToSignalR("Notify", "Response", message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"[AuthService] Exception: {ex.Message}");
             }
         }
     }

@@ -10,7 +10,7 @@ namespace ApiGateway.Controllers
     [ApiController]
     public class RegisterController : ControllerBase
     {
-        private const string _serverURL = "http://192.168.110.43:5280";
+        private const string _serverURL = "http://192.168.110.44:5280";
         private readonly RegisterService _registerService;
 
         public RegisterController(RegisterService registerService)

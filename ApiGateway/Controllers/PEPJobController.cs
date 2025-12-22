@@ -41,14 +41,14 @@ namespace ApiGateway.Controllers
 
                 return Ok(new
                 {
-                    Message = "Job created successfully",
+                    Message = "Job creation is processing using this payload",
                     JobData = jobData,
                     GatewayTimestamp = gatewayTimestamp
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = ex.Message });
+                return BadRequest(ex.Message);
             }
             
         }
