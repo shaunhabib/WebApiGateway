@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using PEPCore;
 using PEPCore.Secret;
 using PEPCore.Settings;
+using PEPRPC;
 using System.Text.Json;
 
 namespace ApiGateway.Controllers
@@ -14,18 +15,16 @@ namespace ApiGateway.Controllers
     [ApiController]
     public class PEPJobController : ControllerBase
     {
-        private readonly PEPJobService _pepJobService;
-        //private readonly PEPGRPC _pepRpc;
+        private readonly PEPGRPC _pepRpc;
         private readonly string DbConnectionstring;
         private const string DbConnectionKey = "POC-DB-ConnectionString";
 
-        public PEPJobController(PEPJobService pepJobService)
+        public PEPJobController(PEPGRPC pepRpc)
         {
-            _pepJobService = pepJobService;
-            //_pepRpc = pepRpc;
             DbConnectionstring = Secret.GetValueAsync(ScopeType.Global, null, DbConnectionKey, null)
                 .GetAwaiter()
                 .GetResult();
+            _pepRpc = pepRpc;
         }
         [HttpPost]
         public IActionResult CreateJob([FromBody] PEPJobRequest jobData)
@@ -37,7 +36,7 @@ namespace ApiGateway.Controllers
                 jobData.GatewayTimestamp = gatewayTimestamp;
 
                 string jobSerialized = JsonSerializer.Serialize(jobData);
-                _pepJobService.SendToRpc("http://localhost:50093", "create", jobSerialized);
+                _pepRpc.SendData<string, string, string>("http://localhost:50093", "create", jobSerialized);
 
                 return Ok(new
                 {
@@ -58,7 +57,7 @@ namespace ApiGateway.Controllers
         {
             try
             {
-                var result = _pepJobService.SendToRpc("http://localhost:50093", "getCategory20", $"category20");
+                var result = _pepRpc.SendData<string, string, string>("http://localhost:50093", "getCategory20", $"category20");
                 if(result.IsSuccess)
                 {
                     var doc = JsonSerializer.Deserialize<JsonElement>(result.Value);
@@ -82,7 +81,7 @@ namespace ApiGateway.Controllers
         {
             try
             {
-                var result = _pepJobService.SendToRpc("http://localhost:50093", "getCategory50", $"category50");
+                var result = _pepRpc.SendData<string, string, string>("http://localhost:50093", "getCategory50", $"category50");
                 if (result.IsSuccess)
                 {
                     var doc = JsonSerializer.Deserialize<JsonElement>(result.Value);
@@ -106,7 +105,7 @@ namespace ApiGateway.Controllers
         {
             try
             {
-                var result = _pepJobService.SendToRpc("http://localhost:50093", "getCategory100", $"{count}");
+                var result = _pepRpc.SendData<string, string, string>("http://localhost:50093", "getCategory100", $"{count}");
                 if (result.IsSuccess)
                 {
                     var doc = JsonSerializer.Deserialize<JsonElement>(result.Value);
@@ -139,7 +138,7 @@ namespace ApiGateway.Controllers
 
                 var gatewayTimestamp = DateTime.UtcNow.TimeOfDay;
 
-                var result = _pepJobService.SendToRpc("http://localhost:50093", "Get", $"{gatewayTimestamp}");
+                var result = _pepRpc.SendData<string, string, string>("http://localhost:50093", "Get", $"{gatewayTimestamp}");
 
 
                 if (result.IsSuccess)

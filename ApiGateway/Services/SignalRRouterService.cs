@@ -57,15 +57,12 @@ public class SignalRRouterService
     {
         try
         {
-            var res = JsonSerializer.Deserialize<LoginResponse>(payload);
+            var res = JsonSerializer.Deserialize<MessageBase>(payload);
             if(res is null)
                 throw new Exception("Deserialized payload is null");
 
-            if(!UpdateData(res.MessageId, res.SubmittedTimeFromFex))
-                throw new Exception("Failed to update performance log.");
-
             if (channel != res.Channel.ToLower())
-                RouteToService(channel, args.Payload);
+                 RouteToService(channel, args.Payload);
             else
                 _signalService.SendData<string, string, string>(res.SignalRClientIdentifier, args.Payload);
         }
@@ -74,28 +71,6 @@ public class SignalRRouterService
         {
             Console.WriteLine($"Error processing message: {ex.Message}");
         }
-    }
-
-    private bool UpdateData(int messageId, TimeSpan SubmittedTimeFromFex)
-    {
-        string updateSql = @"
-                    UPDATE PerformanceLog
-                    SET DeltaC = ABS(DATEDIFF(MILLISECOND, @SubmittedTimeFromFex, @ReceivedTimeFromGW)),
-                        SubmitFromFeX = @SubmitFromFeX,
-                        ReceivedAtGW = @ReceivedAtGW
-                    WHERE MessageId = @MessageId;";
-
-        var param = Utils.KVPList(new[]
-        {
-                ("@MessageId", (object)messageId),
-                ("@SubmittedTimeFromFex", (object)SubmittedTimeFromFex!),
-                ("@ReceivedTimeFromGW", DateTime.UtcNow.TimeOfDay),
-                ("@ReceivedAtGW", DateTime.UtcNow.TimeOfDay.ToString()),
-                ("@SubmitFromFeX", SubmittedTimeFromFex.ToString()),
-            });
-
-        var rowsAffected = DB.Execute(updateSql, param, connection, false, false);
-        return rowsAffected.Value > 0;
     }
 
     private void RouteToService(string channel, string message)
@@ -112,13 +87,5 @@ public class SignalRRouterService
     }
 
     public JobService GetJobService() => _jobService;
-
-    public class LoginResponse : MessageBase
-    {
-        public bool IsSuccess { get; set; }
-        public int MessageId { get; set; }
-        public string Message { get; set; }
-        public TimeSpan SubmittedTimeFromFex { get; set; }
-    }
 
 }

@@ -1,5 +1,6 @@
 using ApiGateway.Config;
 using Microsoft.Extensions.Options;
+using PEPCore;
 using PEPRPC;
 using PEPSignal;
 
@@ -18,9 +19,9 @@ public class GatewayService
         _options = options.Value;
     }
     
-    public void SendToRpc(string channel, string action, string data)
+    public Result<string> SendToRpc(string channel, string action, string data)
     {
-        _rpcService.SendData<string, string, string>(channel, action, data);
+        return _rpcService.SendData<string, string, string>(channel, action, data);
     }
 
     public virtual void Process(string message)

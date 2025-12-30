@@ -1,6 +1,8 @@
-﻿namespace ApiGateway.Models
+﻿using PEPCore;
+
+namespace ApiGateway.Models
 {
-    public class PEPJobRequest
+    public class PEPJobRequest : MessageBase
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
